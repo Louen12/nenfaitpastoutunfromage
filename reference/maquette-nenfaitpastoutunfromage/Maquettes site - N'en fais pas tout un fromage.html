@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>N'en fais pas tout un fromage · Maquettes site mobile</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  html, body { margin: 0; padding: 0; background: #efe9d8; font-family: 'Inter', system-ui, sans-serif; }
+  * { box-sizing: border-box; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="ds.jsx"></script>
+<script type="text/babel" src="screens-a.jsx"></script>
+<script type="text/babel" src="screens-b.jsx"></script>
+<script type="text/babel" src="variants.jsx"></script>
+<script type="text/babel" src="home-logo-variants.jsx"></script>
+<script type="text/babel" src="accueil-complet.jsx"></script>
+
+<script type="text/babel">
+
+const W = 402, H = 874;
+
+// helper: wrap a screen component in an iOSDevice frame
+function Frame({ children, dark = false }) {
+  return (
+    <IOSDevice width={W} height={H} dark={dark}>
+      {children}
+    </IOSDevice>
+  );
+}
+
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection
+        id="intro"
+        title="N'en fais pas tout un fromage"
+        subtitle="Site mobile-first — exploration de maquettes · Direction A : papier crème + vert sapin du logo · Fraunces (serif éditorial) + Inter · Photos en placeholders, à remplacer par les vrais visuels du camion."
+      >
+        <DCArtboard id="cover" label="Brief & DA" width={420} height={H + 24}>
+          <CoverCard />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection
+        id="home-final"
+        title="Maquette d'accueil — hero « mur peint » + artisan + camion"
+        subtitle="Reproduction de l'esprit de la référence client : photo du mur du camion en hero, sceau qui flotte en haut à gauche, grand titre éditorial avec « marchés préférés » en italique vert. Sous le hero, on enchaîne L'ARTISAN, LE CAMION, puis les blocs marchés / boutique / instagram déjà validés."
+      >
+        <DCArtboard id="home-final-1" label="01 · Accueil complet (long scroll)" width={W} height={H}><Frame><HomeAccueilComplet /></Frame></DCArtboard>
+      </DCSection>
+
+      <DCSection
+        id="flow"
+        title="Parcours principal — Direction A · Crème"
+        subtitle="Les 8 écrans-clés du flow : découverte → marchés → boutique → click & collect. Toutes les pages scrollent en interne."
+      >
+        <DCArtboard id="home"      label="01 · Accueil"             width={W} height={H}><Frame><HomeScreen /></Frame></DCArtboard>
+        <DCArtboard id="story"     label="02 · L'artisan"           width={W} height={H}><Frame><StoryScreen /></Frame></DCArtboard>
+        <DCArtboard id="map"       label="03 · Marchés · carte"     width={W} height={H}><Frame><MarchesCarteScreen /></Frame></DCArtboard>
+        <DCArtboard id="list"      label="04 · Marchés · liste"     width={W} height={H}><Frame><MarchesListeScreen /></Frame></DCArtboard>
+        <DCArtboard id="shop"      label="05 · Boutique"            width={W} height={H}><Frame><BoutiqueScreen /></Frame></DCArtboard>
+        <DCArtboard id="prod"      label="06 · Fiche produit"       width={W} height={H}><Frame><ProduitScreen /></Frame></DCArtboard>
+        <DCArtboard id="cart"      label="07 · Panier"              width={W} height={H}><Frame><PanierScreen /></Frame></DCArtboard>
+        <DCArtboard id="pickup"    label="08 · Choix retrait ★"     width={W} height={H}><Frame><CheckoutRetraitScreen /></Frame></DCArtboard>
+        <DCArtboard id="pay"       label="09 · Paiement Stripe"     width={W} height={H}><Frame><CheckoutPaiementScreen /></Frame></DCArtboard>
+        <DCArtboard id="confirm"   label="10 · Confirmation"        width={W} height={H}><Frame><ConfirmationScreen /></Frame></DCArtboard>
+        <DCArtboard id="insta"     label="11 · Flux Instagram"      width={W} height={H}><Frame><InstaScreen /></Frame></DCArtboard>
+      </DCSection>
+
+      <DCSection
+        id="logo-variants"
+        title="Page d'accueil — 4 façons d'intégrer le logo dans le site"
+        subtitle="Le logo n'est plus écrasé dans la barre du téléphone — il devient un vrai élément graphique. Quatre directions, du plus minimal au plus expressif. La topbar a été dégraissée (menu + nom de la page seulement)."
+      >
+        <DCArtboard id="lv-1" label="1 · Sceau central"        width={W} height={H}><Frame><HomeLogoSceau /></Frame></DCArtboard>
+        <DCArtboard id="lv-2" label="2 · Vitrine enseigne"     width={W} height={H}><Frame><HomeLogoVitrine /></Frame></DCArtboard>
+        <DCArtboard id="lv-3" label="3 · Tampon sur photo"     width={W} height={H}><Frame><HomeLogoTampon /></Frame></DCArtboard>
+        <DCArtboard id="lv-4" label="4 · Filigrane géant"      width={W} height={H}><Frame><HomeLogoFiligrane /></Frame></DCArtboard>
+      </DCSection>
+
+      <DCSection
+        id="variants"
+        title="Anciennes pistes de direction visuelle (pour mémoire)"
+        subtitle="Les 3 directions d'ambiance proposées au tour précédent."
+      >
+        <DCArtboard id="v-a"   label="A · Crème (par défaut)"   width={W} height={H}><Frame><HomeScreen /></Frame></DCArtboard>
+        <DCArtboard id="v-b"   label="B · Sombre cave/affinage" width={W} height={H} ><Frame dark><HomeVariantSombre /></Frame></DCArtboard>
+        <DCArtboard id="v-c"   label="C · Éditorial / journal"  width={W} height={H}><Frame><HomeVariantEditorial /></Frame></DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Carte d'intro · charte + reasoning
+// ─────────────────────────────────────────────────────────────
+const sLcover = {
+  mono: { fontFamily: NFTUF.mono, fontSize: 9.5, letterSpacing: 1.4, textTransform: 'uppercase', color: NFTUF.vert },
+};
+function Swatch({ n, c, role }) {
+  const isLight = ['#faf6ea', '#fffdf7', '#f4ecd8', '#e6dec6', '#cfe4d5', '#c9b896'].includes(c);
+  return (
+    <div>
+      <div style={{ height: 52, background: c, borderRadius: 4, boxShadow: `inset 0 0 0 1px ${isLight ? NFTUF.ligne : 'transparent'}` }}/>
+      <div style={{ fontFamily: NFTUF.serif, fontSize: 11.5, color: NFTUF.encre, marginTop: 4, fontWeight: 500 }}>{n}</div>
+      <div style={{ fontFamily: NFTUF.mono, fontSize: 8.5, color: NFTUF.mute, letterSpacing: 0.3 }}>{c.toUpperCase()}</div>
+      {role && <div style={{ fontFamily: NFTUF.sans, fontSize: 9.5, color: NFTUF.mute, marginTop: 2, lineHeight: 1.3 }}>{role}</div>}
+    </div>
+  );
+}
+
+function CoverCard() {
+  return (
+    <div style={{
+      width: '100%', height: '100%', overflow: 'auto',
+      background: NFTUF.cremeClair, padding: '32px 28px', boxSizing: 'border-box',
+      fontFamily: NFTUF.sans, color: NFTUF.texte,
+    }}>
+      <NFTUFLogo size={88} color={NFTUF.vert} light={NFTUF.cremeClair} />
+      <div style={{ marginTop: 18, fontFamily: NFTUF.mono, fontSize: 10, letterSpacing: 1.6, color: NFTUF.vert, textTransform: 'uppercase' }}>
+        Maquettes V1 · MAI 2026
+      </div>
+      <h1 style={{
+        fontFamily: NFTUF.serif, fontSize: 40, lineHeight: 0.98, margin: '14px 0 0',
+        color: NFTUF.encre, letterSpacing: -1, fontWeight: 500,
+      }}>
+        Un site qui<br/><em style={{ fontStyle: 'italic', color: NFTUF.vert, fontWeight: 400 }}>vit</em> avec<br/>vos marchés.
+      </h1>
+      <p style={{ fontSize: 13.5, lineHeight: 1.6, marginTop: 16, maxWidth: 320 }}>
+        Site mobile-first pour <b style={{ color: NFTUF.encre }}>N'en fais pas tout un fromage</b> — storytelling artisan, carte des marchés, boutique click & collect avec choix de retrait (local ou marché).
+      </p>
+
+      <h3 style={{ fontFamily: NFTUF.serif, fontSize: 16, color: NFTUF.encre, marginTop: 26, marginBottom: 4 }}>Palette complète</h3>
+      <p style={{ ...sL?.small || { fontFamily: NFTUF.sans, fontSize: 11, color: NFTUF.mute }, margin: '0 0 10px' }}>
+        Le vert sapin du logo est la couleur principale. Tous les autres tons sont des dérivés tirés du même vert ou des neutres papier.
+      </p>
+
+      <div style={{ ...sLcover.mono, marginTop: 4 }}>VERTS · DÉRIVÉS DU LOGO</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 6, marginTop: 8 }}>
+        {[
+          ['Sapin',   NFTUF.vert,      'logo, CTA principal'],
+          ['Profond', NFTUF.vertProf,  'fond sombre, footer'],
+          ['Clair',   NFTUF.vertLight, 'hover, lien'],
+          ['Sauge',   NFTUF.vertSauge, 'accent sur sombre'],
+          ['Eau',     NFTUF.vertEau,   'italique, texte sec.'],
+        ].map(([n, c, role]) => (
+          <Swatch key={n} n={n} c={c} role={role}/>
+        ))}
+      </div>
+
+      <div style={{ ...sLcover.mono, marginTop: 18 }}>NEUTRES · PAPIER & ENCRE</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 6, marginTop: 8 }}>
+        {[
+          ['Off',      NFTUF.off,        'éditorial'],
+          ['Crème+',   NFTUF.cremeClair, 'cartes'],
+          ['Crème',    NFTUF.creme,      'fond principal'],
+          ['Ligne',    NFTUF.ligne,      'séparateurs'],
+          ['Kraft',    NFTUF.kraft,      'placeholders'],
+        ].map(([n, c, role]) => (
+          <Swatch key={n} n={n} c={c} role={role}/>
+        ))}
+      </div>
+
+      <div style={{ ...sLcover.mono, marginTop: 18 }}>TEXTE & ACCENTS</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 6, marginTop: 8 }}>
+        {[
+          ['Encre',  NFTUF.encre, 'titres'],
+          ['Texte',  NFTUF.texte, 'paragraphe'],
+          ['Mute',   NFTUF.mute,  'labels'],
+          ['Rouge',  NFTUF.rouge, 'rupture / promo'],
+          [null,     'transparent', null],
+        ].map(([n, c, role], i) => n ? <Swatch key={n} n={n} c={c} role={role}/> : <div key={i}/>)}
+      </div>
+
+      <h3 style={{ fontFamily: NFTUF.serif, fontSize: 16, color: NFTUF.encre, marginTop: 24, marginBottom: 8 }}>Typographie</h3>
+      <div style={{ padding: 14, background: NFTUF.creme, borderRadius: 4 }}>
+        <div style={{ fontFamily: NFTUF.serif, fontSize: 30, lineHeight: 1, color: NFTUF.encre, fontWeight: 500 }}>
+          Fraunces <em style={{ color: NFTUF.vert, fontStyle: 'italic', fontWeight: 400 }}>italique</em>
+        </div>
+        <div style={{ fontFamily: NFTUF.mono, fontSize: 10, color: NFTUF.mute, marginTop: 2, letterSpacing: 1 }}>TITRES · ÉDITORIAL</div>
+        <div style={{ height: 1, background: NFTUF.ligne, margin: '12px 0' }}/>
+        <div style={{ fontFamily: NFTUF.sans, fontSize: 14, color: NFTUF.texte }}>
+          Inter — paragraphes, navigation, CTA. Neutre, lisible, mobile-friendly.
+        </div>
+        <div style={{ height: 1, background: NFTUF.ligne, margin: '12px 0' }}/>
+        <div style={{ fontFamily: NFTUF.mono, fontSize: 12, color: NFTUF.encre, letterSpacing: 1 }}>
+          JETBRAINS MONO · ÉTIQUETTES, DATES, MICRO-INFO
+        </div>
+      </div>
+
+      <h3 style={{ fontFamily: NFTUF.serif, fontSize: 16, color: NFTUF.encre, marginTop: 24, marginBottom: 8 }}>Principes</h3>
+      <ul style={{ fontSize: 13, lineHeight: 1.65, paddingLeft: 18, margin: 0 }}>
+        <li>Direction par défaut <b>papier crème + vert sapin</b> — chaleur artisan, contraste fort sur le vert profond pour les CTA.</li>
+        <li><b>Photos = placeholders rayés</b> tant que vous n'avez pas envoyé le shooting (camion, portrait, fromages).</li>
+        <li><b>Logo recréé en SVG</b> dans l'esprit du sceau — à remplacer par le PNG officiel dès qu'il est dispo.</li>
+        <li>Feature signature <b>« choix du retrait »</b> isolée comme étape dédiée du tunnel (écran 08).</li>
+      </ul>
+
+      <div style={{ marginTop: 22, padding: 14, background: NFTUF.vertProf, color: NFTUF.cremeClair, borderRadius: 4, fontSize: 12.5, lineHeight: 1.55 }}>
+        <div style={{ fontFamily: NFTUF.mono, fontSize: 9.5, letterSpacing: 1.4, color: '#9fd1b3', textTransform: 'uppercase' }}>À RÉCUPÉRER POUR LA SUITE</div>
+        <ul style={{ margin: '8px 0 0', paddingLeft: 18 }}>
+          <li>Logo en PNG/SVG haute déf.</li>
+          <li>Shooting photo : camion, portrait, marchés, fromages.</li>
+          <li>Confirmation des fontes (Fraunces ou alternative).</li>
+          <li>Valider la direction A/B/C avant maquettes haute-fi finales.</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+</body>
+</html>

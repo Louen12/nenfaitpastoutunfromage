@@ -1,26 +1,31 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Couleurs — Design System N'en fais pas tout un fromage */
+  --color-vert: #1d5b3a;
+  --color-vert-prof: #143f2a;
+  --color-vert-light: #2a7a4e;
+  --color-vert-sauge: #9fd1b3;
+  --color-vert-eau: #cfe4d5;
+  --color-creme: #f4ecd8;
+  --color-creme-clair: #faf6ea;
+  --color-off: #fffdf7;
+  --color-encre: #1a1a17;
+  --color-texte: #3a3a32;
+  --color-mute: #7a7468;
+  --color-ligne: #e6dec6;
+  --color-ligne-sombre: #2a5a3e;
+  --color-kraft: #c9b896;
+  --color-rouge: #9a3b2e;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Typographie */
+  --font-serif: "Fraunces", "Cormorant Garamond", "Times New Roman", serif;
+  --font-sans: "Inter", -apple-system, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-creme-clair);
+  color: var(--color-texte);
+  font-family: var(--font-sans);
 }

@@ -1,65 +1,254 @@
-import Image from "next/image";
+import Link from "next/link";
+import { cookies } from "next/headers";
+import { createClient } from "@/utils/supabase/server";
+import { centsToEuros, jourLabel } from "@/lib/utils";
+import Button from "@/components/Button";
+import Eyebrow from "@/components/Eyebrow";
+import Chip from "@/components/Chip";
+import PhotoSlot from "@/components/PhotoSlot";
+import HomeAddButton from "@/components/HomeAddButton";
 
-export default function Home() {
+const specs = [
+  { label: "Cave d'affinage", value: "+8 à +12 °C" },
+  { label: "Comptoir réfrigéré", value: "+4 °C · 2,4 m" },
+  { label: "Marchés / semaine", value: "4 + 1 fixe" },
+  { label: "Rayon d'action", value: "ÎdF · 30 km" },
+];
+
+const stats = [
+  { value: "2021", label: "Création" },
+  { value: "15", label: "Fermes partenaires" },
+  { value: "0", label: "Intermédiaires" },
+];
+
+const JOUR_SHORT: Record<number, string> = {
+  0: "Dim", 1: "Lun", 2: "Mar", 3: "Mer", 4: "Jeu", 5: "Ven", 6: "Sam",
+};
+
+export default async function Home() {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+
+  const [{ data: marches }, { data: produits }] = await Promise.all([
+    supabase
+      .from("marches")
+      .select("*")
+      .eq("actif", true)
+      .order("jour_semaine")
+      .order("position"),
+    supabase
+      .from("produits")
+      .select("*")
+      .eq("disponible", true)
+      .order("en_avant", { ascending: false })
+      .order("position")
+      .limit(4),
+  ]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <>
+      {/* ───────── 1. Hero ───────── */}
+      <section className="relative bg-vert-prof text-creme-clair" style={{ minHeight: 430 }}>
+        <div className="flex items-start justify-between px-5 pt-5">
+          <div className="flex size-14 items-center justify-center rounded-full border border-creme-clair/30 text-[10px] font-mono uppercase leading-tight tracking-widest text-creme-clair/80">
+            NFPTUF
+          </div>
+          <div className="flex items-center gap-4 pt-1">
+            <Link href="/panier" aria-label="Panier">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="size-6">
+                <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+        <div className="flex flex-1 flex-col items-center justify-center px-6 pb-10 pt-16 text-center">
+          <h1 className="font-serif text-3xl font-bold uppercase leading-tight tracking-wide">
+            N&rsquo;en fais pas<br />tout un fromage
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-3 text-xs font-mono uppercase tracking-[.25em] text-creme-clair/70">
+            Fromagerie&ensp;·&ensp;Crèmerie
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* ───────── 2. Hero Title ───────── */}
+      <section className="bg-creme px-5 py-10">
+        <Eyebrow>Fromagerie itinérante</Eyebrow>
+        <h2 className="mt-3 font-serif text-2xl font-semibold leading-snug text-encre">
+          Présent toute l&rsquo;année sur vos{" "}
+          <em className="not-italic text-vert italic">marchés préférés</em>
+        </h2>
+        <div className="mt-6 flex gap-3">
+          <Link href="/marches">
+            <Button variant="primary">Voir les marchés&ensp;→</Button>
+          </Link>
+          <Link href="/boutique">
+            <Button variant="ghost">La boutique</Button>
+          </Link>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* ───────── 3. L'artisan ───────── */}
+      <section className="bg-off px-5 py-12">
+        <Eyebrow>L&rsquo;artisan · Maxime</Eyebrow>
+        <h2 className="mt-3 font-serif text-2xl font-semibold leading-snug text-encre">
+          Un seul fromager,{" "}
+          <em className="not-italic text-vert italic">quinze fermes choisies</em>
+        </h2>
+        <PhotoSlot label="Portrait Maxime" height="h-56" className="mt-6" tone="creme" />
+        <p className="mt-6 text-sm leading-relaxed text-texte">
+          Maxime sillonne l&rsquo;Île-de-France avec son fourgon aménagé pour
+          proposer des fromages fermiers sélectionnés directement auprès de
+          quinze producteurs de confiance. Pas d&rsquo;intermédiaire, pas de
+          plateforme : un lien direct entre la ferme et votre assiette.
+        </p>
+        <div className="mt-8 grid grid-cols-3 gap-4 text-center">
+          {stats.map((s) => (
+            <div key={s.label}>
+              <p className="font-serif text-2xl font-bold text-vert">{s.value}</p>
+              <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-mute">{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ───────── 4. Le camion ───────── */}
+      <section className="bg-vert-prof px-5 py-12 text-creme-clair">
+        <Eyebrow color="vert-sauge">Le camion</Eyebrow>
+        <h2 className="mt-3 font-serif text-2xl font-semibold leading-snug">
+          Un fourgon-fromagerie,{" "}
+          <em className="not-italic text-vert-sauge italic">aménagé sur-mesure</em>
+        </h2>
+        <PhotoSlot label="Le camion" height="h-52" className="mt-6" tone="sombre" />
+        <ul className="mt-8 space-y-4">
+          {specs.map((s) => (
+            <li key={s.label} className="flex items-baseline justify-between border-b border-ligne-sombre/30 pb-3">
+              <span className="text-sm text-creme-clair/70">{s.label}</span>
+              <span className="font-mono text-sm font-medium">{s.value}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* ───────── 5. Marchés cette semaine ───────── */}
+      <section className="bg-creme py-10">
+        <div className="px-5">
+          <div className="flex items-center gap-3">
+            <Eyebrow>Marchés cette semaine</Eyebrow>
+            <Chip tone="open" sm>{marches?.length ?? 0} marché{(marches?.length ?? 0) > 1 ? "s" : ""}</Chip>
+          </div>
+        </div>
+        <div className="mt-5 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-none">
+          {marches && marches.length > 0 ? (
+            marches.map((m) => (
+              <article
+                key={m.id}
+                className="flex w-44 shrink-0 flex-col rounded-xl border border-ligne bg-creme-clair p-4"
+              >
+                <p className="text-xs font-mono uppercase tracking-wider text-mute">
+                  {m.jour_semaine !== null ? JOUR_SHORT[m.jour_semaine] : ""}
+                </p>
+                <p className="mt-1 font-serif text-lg font-semibold text-encre">{m.commune}</p>
+                <p className="mt-auto pt-3 text-xs text-mute">
+                  {m.heure_debut && m.heure_fin
+                    ? `${m.heure_debut.slice(0, 5)}–${m.heure_fin.slice(0, 5)}`
+                    : "Horaires à venir"}
+                </p>
+              </article>
+            ))
+          ) : (
+            <p className="text-sm text-mute">Aucun marché cette semaine.</p>
+          )}
+        </div>
+      </section>
+
+      {/* ───────── 6. Boutique preview ───────── */}
+      <section className="bg-off px-5 py-12">
+        <Eyebrow>La boutique</Eyebrow>
+        <h2 className="mt-3 font-serif text-2xl font-semibold leading-snug text-encre">
+          Nos fromages
+        </h2>
+        <div className="mt-6 grid grid-cols-2 gap-3">
+          {produits && produits.length > 0 ? (
+            produits.map((p) => (
+              <article
+                key={p.id}
+                className="relative flex flex-col overflow-hidden rounded-xl border border-ligne bg-creme-clair"
+              >
+                <Link href={`/boutique/${p.slug}`}>
+                  {p.image_url ? (
+                    <img src={p.image_url} alt={p.nom} className="h-32 w-full object-cover" />
+                  ) : (
+                    <div className="h-32 w-full bg-kraft/30 flex items-center justify-center">
+                      <span className="text-2xl">🧀</span>
+                    </div>
+                  )}
+                </Link>
+                <div className="flex flex-1 flex-col p-3">
+                  <h3 className="text-sm font-semibold leading-snug text-encre">{p.nom}</h3>
+                  <p className="mt-auto pt-2 text-xs text-mute">
+                    <span className="font-semibold text-vert">{centsToEuros(p.prix_cents)}&nbsp;€</span>
+                    <span className="ml-1">/ {p.unite_label}</span>
+                  </p>
+                </div>
+                <HomeAddButton
+                  produit={{
+                    produit_id: p.id,
+                    nom: p.nom,
+                    slug: p.slug,
+                    prix_cents: p.prix_cents,
+                    unite_label: p.unite_label,
+                    image_url: p.image_url,
+                  }}
+                />
+              </article>
+            ))
+          ) : (
+            <p className="col-span-2 text-sm text-mute text-center py-4">
+              Produits bientôt disponibles.
+            </p>
+          )}
+        </div>
+        <div className="mt-6 text-center">
+          <Link href="/boutique">
+            <Button variant="ghost">Voir toute la boutique&ensp;→</Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* ───────── 7. Instagram ───────── */}
+      <section className="bg-creme px-5 py-12">
+        <Eyebrow>Instagram</Eyebrow>
+        <h2 className="mt-3 font-serif text-xl font-semibold text-encre">
+          @nenfaitpastoutunfromage
+        </h2>
+        <div className="mt-5 grid grid-cols-3 gap-2">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <PhotoSlot key={i} label={`Insta ${i + 1}`} height="h-28" tone="kraft" />
+          ))}
+        </div>
+      </section>
+
+      {/* ───────── 8. Footer ───────── */}
+      <footer className="bg-vert-prof px-5 py-10 text-creme-clair">
+        <div className="flex size-12 items-center justify-center rounded-full border border-creme-clair/25 text-[9px] font-mono uppercase leading-tight tracking-widest text-creme-clair/70">
+          NFPTUF
+        </div>
+        <p className="mt-4 font-serif text-sm italic leading-relaxed text-creme-clair/70">
+          &laquo;&ensp;Le bon fromage, c&rsquo;est celui qu&rsquo;on choisit bien.&ensp;&raquo;
+        </p>
+        <nav className="mt-6 flex gap-4 text-xs font-medium uppercase tracking-wider text-creme-clair/60">
+          <a href="#" className="hover:text-creme-clair transition-colors">Instagram</a>
+          <span className="text-creme-clair/20">·</span>
+          <a href="#" className="hover:text-creme-clair transition-colors">Facebook</a>
+          <span className="text-creme-clair/20">·</span>
+          <a href="#" className="hover:text-creme-clair transition-colors">Contact</a>
+        </nav>
+        <p className="mt-6 text-xs text-creme-clair/40">Massy · Île-de-France</p>
+      </footer>
+
+      <div className="h-16" />
+    </>
   );
 }
