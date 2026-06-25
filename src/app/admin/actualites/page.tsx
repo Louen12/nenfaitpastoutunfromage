@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import AdminShell from "@/components/admin/AdminShell";
 import ActualiteToggle from "./ActualiteToggle";
+import ClickStop from "@/components/admin/ClickStop";
 
 export default async function ActualitesPage() {
   const cookieStore = await cookies();
@@ -53,9 +54,9 @@ export default async function ActualitesPage() {
               </p>
             </div>
 
-            <div className="shrink-0" onClick={(e) => e.preventDefault()}>
+            <ClickStop className="shrink-0">
               <ActualiteToggle id={a.id} publie={a.publie} />
-            </div>
+            </ClickStop>
           </Link>
         ))}
 

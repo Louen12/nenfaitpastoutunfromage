@@ -1,9 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { type Tables } from "@/utils/supabase/database.types";
 import { jourLabel } from "@/lib/utils";
-import Button from "@/components/Button";
+
+const MarchesMap = dynamic(() => import("@/components/MarchesMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="mx-4 rounded-xl bg-vert-eau/30 h-[70vh] flex items-center justify-center">
+      <p className="text-sm text-mute animate-pulse">Chargement de la carte…</p>
+    </div>
+  ),
+});
 
 type Marche = Tables<"marches">;
 
@@ -19,7 +29,7 @@ const JOUR_SHORT: Record<number, string> = {
 
 export default function MarchesClient({ marches }: { marches: Marche[] }) {
   const [view, setView] = useState<"carte" | "liste">("liste");
-  const [selected, setSelected] = useState<Marche | null>(marches[0] ?? null);
+  const router = useRouter();
 
   return (
     <>
@@ -51,66 +61,21 @@ export default function MarchesClient({ marches }: { marches: Marche[] }) {
 
       {/* Carte view */}
       {view === "carte" && (
-        <div className="relative">
-          <div className="relative mx-4 rounded-xl bg-vert-eau/50 h-[52vh] overflow-hidden">
-            <div
-              className="absolute inset-0 opacity-20"
-              style={{
-                backgroundImage: "radial-gradient(circle, var(--color-vert-sauge) 1px, transparent 1px)",
-                backgroundSize: "18px 18px",
-              }}
-            />
-            {marches
-              .filter((m) => m.latitude && m.longitude)
-              .map((m, i) => (
-                <button
-                  key={m.id}
-                  onClick={() => setSelected(m)}
-                  className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full px-3 py-1 text-[10px] font-mono font-bold shadow-sm whitespace-nowrap transition-colors ${
-                    selected?.id === m.id
-                      ? "bg-vert text-creme-clair ring-2 ring-creme-clair"
-                      : "bg-creme-clair text-encre"
-                  }`}
-                  style={{
-                    top: `${20 + i * 18}%`,
-                    left: `${25 + ((i * 20) % 55)}%`,
-                  }}
-                >
-                  {m.jour_semaine !== null ? JOUR_SHORT[m.jour_semaine] : ""} · {m.commune}
-                </button>
-              ))}
-            <p className="absolute bottom-2 right-2 text-[9px] text-vert/50 font-mono">
-              Carte Leaflet bientôt
-            </p>
+        <div className="pb-6">
+          <MarchesMap
+            marches={marches}
+            onSelectForRetrait={(id) => router.push(`/panier?retrait=marche&marche_id=${id}`)}
+          />
+          <div className="mx-4 mt-3 flex items-center gap-4 text-xs text-mute">
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block size-3 rounded-full" style={{ background: "#1d5b3a" }} />
+              Itinérant
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block size-3 rounded-full" style={{ background: "#b5651d" }} />
+              Local fixe
+            </span>
           </div>
-
-          {selected && (
-            <div className="mx-4 mt-3 rounded-xl bg-white p-4 shadow-sm border border-ligne">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-base font-serif font-semibold text-encre">{selected.nom}</p>
-                  <p className="mt-0.5 text-xs font-sans text-mute">
-                    {selected.jour_semaine !== null ? jourLabel(selected.jour_semaine) : ""}
-                    {selected.heure_debut && selected.heure_fin &&
-                      ` · ${selected.heure_debut.slice(0, 5)}–${selected.heure_fin.slice(0, 5)}`}
-                  </p>
-                  {selected.adresse && (
-                    <p className="text-xs text-mute mt-0.5">{selected.adresse}</p>
-                  )}
-                </div>
-                <span className="shrink-0 rounded-full bg-vert-eau px-2.5 py-0.5 text-[10px] font-mono font-medium text-vert-prof">
-                  {selected.type === "local_fixe" ? "Local fixe" : "Itinérant"}
-                </span>
-              </div>
-              {selected.point_retrait && (
-                <div className="mt-3">
-                  <Button variant="primary" sm full>
-                    Commander pour ce retrait
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
         </div>
       )}
 

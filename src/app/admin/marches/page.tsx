@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { jourLabel } from "@/lib/utils";
 import AdminShell from "@/components/admin/AdminShell";
 import MarcheToggle from "./MarcheToggle";
+import ClickStop from "@/components/admin/ClickStop";
 
 export default async function MarchesPage() {
   const cookieStore = await cookies();
@@ -56,9 +57,9 @@ export default async function MarchesPage() {
               </div>
             </div>
 
-            <div className="shrink-0" onClick={(e) => e.preventDefault()}>
+            <ClickStop className="shrink-0">
               <MarcheToggle id={m.id} actif={m.actif} />
-            </div>
+            </ClickStop>
           </Link>
         ))}
 

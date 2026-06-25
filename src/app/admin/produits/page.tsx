@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { centsToEuros } from "@/lib/utils";
 import AdminShell from "@/components/admin/AdminShell";
 import ProduitToggle from "./ProduitToggle";
+import ClickStop from "@/components/admin/ClickStop";
 
 export default async function ProduitsPage() {
   const cookieStore = await cookies();
@@ -62,9 +63,9 @@ export default async function ProduitsPage() {
               </p>
             </div>
 
-            <div className="shrink-0" onClick={(e) => e.preventDefault()}>
+            <ClickStop className="shrink-0">
               <ProduitToggle id={p.id} disponible={p.disponible} />
-            </div>
+            </ClickStop>
           </Link>
         ))}
 

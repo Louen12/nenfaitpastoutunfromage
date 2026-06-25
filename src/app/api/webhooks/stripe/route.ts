@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { createAdminClient } from "@/utils/supabase/admin";
+import { sendPickupEmail } from "@/lib/email/sendPickupEmail";
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
@@ -95,7 +96,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
           ? session.payment_intent
           : session.payment_intent?.id ?? null,
     })
-    .select("id")
+    .select("id, numero")
     .single();
 
   if (cmdError || !commande) {
@@ -125,6 +126,31 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     }
   }
 
-  // Point d'extension : envoyer un email de confirmation ici (ex. Resend)
-  // await sendConfirmationEmail(meta.client_email, commande.id, ...);
+  try {
+    let marcheInfo;
+    if (meta.retrait_type === "marche" && meta.retrait_marche_id) {
+      const { data: m } = await supabase
+        .from("marches")
+        .select("nom, commune, adresse, jour_semaine, heure_debut, heure_fin")
+        .eq("id", meta.retrait_marche_id)
+        .single();
+      if (m) marcheInfo = m;
+    }
+
+    await sendPickupEmail(
+      {
+        numero: commande.numero,
+        client_nom: meta.client_nom,
+        client_email: meta.client_email,
+        total_cents: totalCents,
+        retrait_type: meta.retrait_type,
+        retrait_date: meta.retrait_date || null,
+        retrait_creneau: meta.retrait_creneau || null,
+      },
+      commandeItems,
+      marcheInfo ?? undefined,
+    );
+  } catch (emailErr) {
+    console.error("Failed to send pickup email (non-fatal):", emailErr);
+  }
 }
