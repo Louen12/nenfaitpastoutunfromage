@@ -34,7 +34,7 @@ export default function MarchesClient({ marches }: { marches: Marche[] }) {
   return (
     <>
       {/* Toggle Carte / Liste */}
-      <div className="px-4 pb-3">
+      <div className="px-4 lg:px-10 pb-3">
         <div className="inline-flex rounded-full bg-encre p-0.5">
           <button
             onClick={() => setView("carte")}
@@ -81,7 +81,7 @@ export default function MarchesClient({ marches }: { marches: Marche[] }) {
 
       {/* Liste view */}
       {view === "liste" && (
-        <div className="px-4 pb-8">
+        <div className="px-4 lg:px-10 pb-8">
           {marches.length === 0 ? (
             <p className="text-center text-sm text-mute py-8">Aucun marché cette semaine.</p>
           ) : (

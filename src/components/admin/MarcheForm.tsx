@@ -43,10 +43,10 @@ export default function MarcheForm({ marche }: { marche?: Marche }) {
 
       <div className="grid grid-cols-2 gap-3">
         <Field label="Commune *">
-          <Input name="commune" required defaultValue={marche?.commune} placeholder="Versailles" />
+          <Input name="commune" required defaultValue={marche?.commune} placeholder="Ploumilliau" />
         </Field>
         <Field label="Code postal">
-          <Input name="code_postal" defaultValue={marche?.code_postal ?? ""} placeholder="78000" />
+          <Input name="code_postal" defaultValue={marche?.code_postal ?? ""} placeholder="22300" />
         </Field>
       </div>
 

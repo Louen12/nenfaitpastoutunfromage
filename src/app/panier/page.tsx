@@ -1,7 +1,14 @@
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import Topbar from "@/components/Topbar";
 import PanierClient from "./PanierClient";
+
+export const metadata: Metadata = {
+  title: "Panier",
+  description: "Votre panier — finalisez votre commande click & collect.",
+  robots: { index: false, follow: false },
+};
 
 export default async function PanierPage() {
   const cookieStore = await cookies();

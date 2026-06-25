@@ -41,7 +41,7 @@ export default function BoutiqueGrid({
   return (
     <>
       {/* Category filters */}
-      <div className="mt-4 flex gap-2 overflow-x-auto px-4 pb-2 scrollbar-none">
+      <div className="mt-4 flex gap-2 overflow-x-auto px-4 lg:px-10 pb-2 scrollbar-none">
         <button
           onClick={() => setActiveCategory(null)}
           className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-sans font-semibold transition-colors ${
@@ -68,7 +68,7 @@ export default function BoutiqueGrid({
       </div>
 
       {/* Product grid */}
-      <div className="px-4 pt-3 pb-8 grid grid-cols-2 gap-3">
+      <div className="px-4 lg:px-10 pt-3 pb-8 grid grid-cols-2 gap-3">
         {filtered.map((p) => {
           const rupture = isRupture(p);
           return (

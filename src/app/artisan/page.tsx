@@ -1,89 +1,65 @@
+import { Metadata } from "next";
 import Topbar from "@/components/Topbar";
 import Eyebrow from "@/components/Eyebrow";
 import PhotoSlot from "@/components/PhotoSlot";
 
-const producers = [
-  { name: "Ferme du Vallon", region: "Jura", product: "Comté", distance: "410 km" },
-  { name: "GAEC Bouvier", region: "Auvergne", product: "Bleus", distance: "380 km" },
-  { name: "Chèvrerie de l'Yonne", region: "Bourgogne", product: "Crottins", distance: "180 km" },
-  { name: "Fromagerie Marchand", region: "Normandie", product: "Camemberts", distance: "220 km" },
-];
+export const metadata: Metadata = {
+  title: "L'artisan",
+  description:
+    "Découvrez Maugan LE GAC, fromager itinérant en Bretagne. De Paris au Finistère : l'histoire d'un artisan passionné.",
+  openGraph: {
+    title: "L'artisan — N'en fais pas tout un fromage",
+    description: "L'histoire de Maugan, fromager itinérant en Bretagne.",
+  },
+};
 
 export default function ArtisanPage() {
   return (
     <div className="min-h-screen bg-creme-clair">
       <Topbar title="L'artisan" back />
 
-      <main className="px-4 py-6 space-y-8">
+      <main className="px-4 lg:px-10 py-6 space-y-8">
         {/* Header */}
         <section className="space-y-2">
-          <Eyebrow>Chapitre 01</Eyebrow>
-          <h2 className="text-2xl font-serif font-bold text-encre leading-tight">
-            Du laboratoire <em className="text-vert italic">au camion</em>
-          </h2>
+          <Eyebrow>L&rsquo;artisan</Eyebrow>
+          <h1 className="text-2xl font-serif font-bold text-encre leading-tight">
+            De Paris <em className="text-vert italic">à la Bretagne</em>
+          </h1>
           <p className="text-sm text-mute font-sans">
-            par Maxime · lecture 3 min
+            par Maugan
           </p>
         </section>
 
         {/* Hero photo */}
-        <PhotoSlot label="atelier.jpg" height="h-56" tone="vert" />
+        <PhotoSlot label="Portrait Maugan" height="h-56" tone="vert" />
 
-        {/* Narrative text with drop cap */}
+        {/* Récit */}
         <section className="space-y-4">
           <p className="text-[15px] font-sans text-texte leading-relaxed">
             <span className="float-left text-5xl font-serif font-bold text-vert leading-none mr-2 mt-1">
-              J
+              M
             </span>
-            e travaillais en laboratoire depuis huit ans. Les gestes étaient sûrs, les
-            résultats réguliers, mais quelque chose manquait : le contact. Le jour où
-            j&apos;ai chargé mes premiers plateaux dans un camion réfrigéré, j&apos;ai
-            compris que le fromage ne prenait tout son sens qu&apos;au moment où on le
-            partage.
+            augan LE GAC a travaillé deux ans dans une fromagerie à Paris.
+            Fort de cette expérience, il est revenu en Bretagne pour lancer
+            son camion de fromages, basé à Plouégat-Guérand, dans le Finistère.
           </p>
           <p className="text-[15px] font-sans text-texte leading-relaxed">
-            Depuis, chaque marché est une scène ouverte. Je raconte les fermes, les
-            saisons d&apos;affinage, les accidents heureux. Les clients deviennent des
-            habitués, puis des complices. Le camion, c&apos;est mon atelier à ciel
-            ouvert.
+            Ses fromages sont une sélection personnelle, issue
+            d&rsquo;artisans fromagers. Chaque semaine, il sillonne les marchés
+            du Finistère et des Côtes-d&rsquo;Armor pour partager sa passion
+            et ses trouvailles.
           </p>
         </section>
 
-        {/* Producers section */}
-        <section className="space-y-4">
-          <Eyebrow>Les producteurs</Eyebrow>
-          <h3 className="text-xl font-serif font-bold text-encre leading-tight">
-            15 fermes, 0 intermédiaire
-          </h3>
-
-          <div className="space-y-3">
-            {producers.map((p) => (
-              <div
-                key={p.name}
-                className="flex items-center gap-3 bg-white rounded-xl px-4 py-3 border border-ligne"
-              >
-                {/* Avatar */}
-                <div className="flex items-center justify-center size-10 rounded-full bg-vert text-creme-clair text-sm font-serif font-bold shrink-0">
-                  {p.name.charAt(0)}
-                </div>
-
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-sans font-semibold text-encre truncate">
-                    {p.name}
-                  </p>
-                  <p className="text-xs font-sans text-mute">
-                    {p.region} · {p.product}
-                  </p>
-                </div>
-
-                {/* Distance */}
-                <span className="text-xs font-mono text-mute whitespace-nowrap">
-                  {p.distance}
-                </span>
-              </div>
-            ))}
-          </div>
+        {/* À venir */}
+        <section className="rounded-xl bg-vert-eau/30 border border-vert-eau p-5 space-y-2">
+          <p className="text-xs font-medium text-vert-prof uppercase tracking-wide">
+            À venir
+          </p>
+          <p className="text-sm text-texte leading-relaxed">
+            Photos du camion, détails sur les producteurs partenaires et le
+            parcours de Maugan — contenus à enrichir après le shooting.
+          </p>
         </section>
       </main>
     </div>

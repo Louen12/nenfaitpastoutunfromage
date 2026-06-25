@@ -1,8 +1,19 @@
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import Topbar from "@/components/Topbar";
 import Eyebrow from "@/components/Eyebrow";
 import PhotoSlot from "@/components/PhotoSlot";
+
+export const metadata: Metadata = {
+  title: "Actu",
+  description:
+    "Actualités et coulisses de la fromagerie itinérante N'en fais pas tout un fromage. Nouveautés, marchés et Instagram.",
+  openGraph: {
+    title: "Actu — N'en fais pas tout un fromage",
+    description: "Nouveautés et coulisses du fromager ambulant.",
+  },
+};
 
 export default async function ActuPage() {
   const cookieStore = await cookies();
@@ -18,7 +29,7 @@ export default async function ActuPage() {
     <div className="min-h-screen bg-creme-clair">
       <Topbar title="Actu" />
 
-      <main className="px-4 py-6 space-y-8">
+      <main className="px-4 lg:px-10 py-6 space-y-8">
         {/* Nouveautés */}
         {actualites && actualites.length > 0 && (
           <section className="space-y-4">

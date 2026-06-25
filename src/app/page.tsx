@@ -1,24 +1,49 @@
 import Link from "next/link";
+import Image from "next/image";
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { centsToEuros, jourLabel } from "@/lib/utils";
+import { SITE } from "@/lib/config/site";
 import Button from "@/components/Button";
 import Eyebrow from "@/components/Eyebrow";
 import Chip from "@/components/Chip";
-import PhotoSlot from "@/components/PhotoSlot";
 import HomeAddButton from "@/components/HomeAddButton";
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": SITE.url,
+  name: SITE.nomCommercial,
+  description: SITE.description,
+  url: SITE.url,
+  telephone: SITE.telephone,
+  email: SITE.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: SITE.adresse,
+    addressLocality: SITE.ville,
+    postalCode: SITE.codePostal,
+    addressCountry: "FR",
+  },
+  areaServed: {
+    "@type": "GeoCircle",
+    geoMidpoint: { "@type": "GeoCoordinates", latitude: 48.633, longitude: -3.583 },
+    geoRadius: "50000",
+  },
+  sameAs: [SITE.instagram, SITE.facebook],
+  priceRange: "€€",
+};
+
 const specs = [
-  { label: "Cave d'affinage", value: "+8 à +12 °C" },
-  { label: "Comptoir réfrigéré", value: "+4 °C · 2,4 m" },
-  { label: "Marchés / semaine", value: "4 + 1 fixe" },
-  { label: "Rayon d'action", value: "ÎdF · 30 km" },
+  { label: "Comptoir réfrigéré", value: "+4 °C" },
+  { label: "Marchés / semaine", value: "2 + local" },
+  { label: "Zone", value: "Finistère · Côtes-d'Armor" },
 ];
 
 const stats = [
-  { value: "2021", label: "Création" },
-  { value: "15", label: "Fermes partenaires" },
-  { value: "0", label: "Intermédiaires" },
+  { value: "2025", label: "Création" },
+  { value: "100%", label: "Artisanal" },
+  { value: "0", label: "Intermédiaire" },
 ];
 
 const JOUR_SHORT: Record<number, string> = {
@@ -29,7 +54,7 @@ export default async function Home() {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
-  const [{ data: marches }, { data: produits }] = await Promise.all([
+  const [{ data: marches }, { data: produits }, { data: actualites }] = await Promise.all([
     supabase
       .from("marches")
       .select("*")
@@ -43,16 +68,30 @@ export default async function Home() {
       .order("en_avant", { ascending: false })
       .order("position")
       .limit(4),
+    supabase
+      .from("actualites")
+      .select("*")
+      .eq("publie", true)
+      .order("created_at", { ascending: false })
+      .limit(2),
   ]);
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ───────── 1. Hero ───────── */}
       <section className="relative bg-vert-prof text-creme-clair" style={{ minHeight: 430 }}>
-        <div className="flex items-start justify-between px-5 pt-5">
-          <div className="flex size-14 items-center justify-center rounded-full border border-creme-clair/30 text-[10px] font-mono uppercase leading-tight tracking-widest text-creme-clair/80">
-            NFPTUF
-          </div>
+        <div className="flex items-start justify-between px-5 lg:px-10 pt-5">
+          <Image
+            src="/logo.png"
+            alt={SITE.nomCommercial}
+            width={56}
+            height={56}
+            className="size-14 rounded-full"
+          />
           <div className="flex items-center gap-4 pt-1">
             <Link href="/panier" aria-label="Panier">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="size-6">
@@ -73,7 +112,7 @@ export default async function Home() {
       </section>
 
       {/* ───────── 2. Hero Title ───────── */}
-      <section className="bg-creme px-5 py-10">
+      <section className="bg-creme px-5 lg:px-10 py-10">
         <Eyebrow>Fromagerie itinérante</Eyebrow>
         <h2 className="mt-3 font-serif text-2xl font-semibold leading-snug text-encre">
           Présent toute l&rsquo;année sur vos{" "}
@@ -90,18 +129,26 @@ export default async function Home() {
       </section>
 
       {/* ───────── 3. L'artisan ───────── */}
-      <section className="bg-off px-5 py-12">
-        <Eyebrow>L&rsquo;artisan · Maxime</Eyebrow>
+      <section className="bg-off px-5 lg:px-10 py-12">
+        <Eyebrow>L&rsquo;artisan · Maugan</Eyebrow>
         <h2 className="mt-3 font-serif text-2xl font-semibold leading-snug text-encre">
-          Un seul fromager,{" "}
-          <em className="not-italic text-vert italic">quinze fermes choisies</em>
+          Un fromager itinérant,{" "}
+          <em className="not-italic text-vert italic">une sélection d&rsquo;artisans</em>
         </h2>
-        <PhotoSlot label="Portrait Maxime" height="h-56" className="mt-6" tone="creme" />
+        <div className="mt-6 overflow-hidden rounded-xl">
+          <Image
+            src="/images/camion-fromage.png"
+            alt="Intérieur du camion — N'en fais pas tout un fromage"
+            width={800}
+            height={450}
+            className="w-full h-56 object-cover"
+          />
+        </div>
         <p className="mt-6 text-sm leading-relaxed text-texte">
-          Maxime sillonne l&rsquo;Île-de-France avec son fourgon aménagé pour
-          proposer des fromages fermiers sélectionnés directement auprès de
-          quinze producteurs de confiance. Pas d&rsquo;intermédiaire, pas de
-          plateforme : un lien direct entre la ferme et votre assiette.
+          Maugan a travaillé deux ans dans une fromagerie à Paris. Fort de cette
+          expérience, il est revenu en Bretagne pour lancer son camion de fromages,
+          basé à Plouégat-Guérand. Ses fromages sont une sélection personnelle,
+          issue d&rsquo;artisans fromagers.
         </p>
         <div className="mt-8 grid grid-cols-3 gap-4 text-center">
           {stats.map((s) => (
@@ -114,13 +161,21 @@ export default async function Home() {
       </section>
 
       {/* ───────── 4. Le camion ───────── */}
-      <section className="bg-vert-prof px-5 py-12 text-creme-clair">
+      <section className="bg-vert-prof px-5 lg:px-10 py-12 text-creme-clair">
         <Eyebrow color="vert-sauge">Le camion</Eyebrow>
         <h2 className="mt-3 font-serif text-2xl font-semibold leading-snug">
           Un fourgon-fromagerie,{" "}
           <em className="not-italic text-vert-sauge italic">aménagé sur-mesure</em>
         </h2>
-        <PhotoSlot label="Le camion" height="h-52" className="mt-6" tone="sombre" />
+        <div className="mt-6 overflow-hidden rounded-xl">
+          <Image
+            src="/images/rayon-fromage.png"
+            alt="Comptoir réfrigéré du camion avec les fromages"
+            width={800}
+            height={400}
+            className="w-full h-52 object-cover"
+          />
+        </div>
         <ul className="mt-8 space-y-4">
           {specs.map((s) => (
             <li key={s.label} className="flex items-baseline justify-between border-b border-ligne-sombre/30 pb-3">
@@ -133,13 +188,13 @@ export default async function Home() {
 
       {/* ───────── 5. Marchés cette semaine ───────── */}
       <section className="bg-creme py-10">
-        <div className="px-5">
+        <div className="px-5 lg:px-10">
           <div className="flex items-center gap-3">
             <Eyebrow>Marchés cette semaine</Eyebrow>
             <Chip tone="open" sm>{marches?.length ?? 0} marché{(marches?.length ?? 0) > 1 ? "s" : ""}</Chip>
           </div>
         </div>
-        <div className="mt-5 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-none">
+        <div className="mt-5 flex gap-3 overflow-x-auto px-5 lg:px-10 pb-2 scrollbar-none">
           {marches && marches.length > 0 ? (
             marches.map((m) => (
               <article
@@ -164,7 +219,7 @@ export default async function Home() {
       </section>
 
       {/* ───────── 6. Boutique preview ───────── */}
-      <section className="bg-off px-5 py-12">
+      <section className="bg-off px-5 lg:px-10 py-12">
         <Eyebrow>La boutique</Eyebrow>
         <h2 className="mt-3 font-serif text-2xl font-semibold leading-snug text-encre">
           Nos fromages
@@ -217,35 +272,80 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ───────── 7. Instagram ───────── */}
-      <section className="bg-creme px-5 py-12">
-        <Eyebrow>Instagram</Eyebrow>
-        <h2 className="mt-3 font-serif text-xl font-semibold text-encre">
-          @nenfaitpastoutunfromage
-        </h2>
-        <div className="mt-5 grid grid-cols-3 gap-2">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <PhotoSlot key={i} label={`Insta ${i + 1}`} height="h-28" tone="kraft" />
-          ))}
-        </div>
-      </section>
+      {/* ───────── 7. Nouveautés ───────── */}
+      {actualites && actualites.length > 0 && (
+        <section className="bg-creme px-5 lg:px-10 py-12">
+          <Eyebrow>Nouveautés</Eyebrow>
+          <h2 className="mt-3 font-serif text-xl font-semibold text-encre">
+            Quoi de <em className="text-vert italic">neuf</em>&nbsp;?
+          </h2>
+          <div className="mt-5 space-y-4">
+            {actualites.map((a) => (
+              <article
+                key={a.id}
+                className="overflow-hidden rounded-xl border border-ligne bg-creme-clair"
+              >
+                {a.image_url && (
+                  <img
+                    src={a.image_url}
+                    alt={a.titre}
+                    className="w-full h-40 object-cover"
+                  />
+                )}
+                <div className="p-4">
+                  <p className="text-[11px] font-mono uppercase tracking-wider text-mute">
+                    {new Date(a.created_at).toLocaleDateString("fr-FR", {
+                      day: "numeric",
+                      month: "long",
+                    })}
+                  </p>
+                  <h3 className="mt-1 font-serif text-base font-semibold text-encre">
+                    {a.titre}
+                  </h3>
+                  {a.contenu && (
+                    <p className="mt-1 text-sm text-texte leading-relaxed line-clamp-2">
+                      {a.contenu}
+                    </p>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className="mt-5 text-center">
+            <Link href="/actu">
+              <Button variant="ghost">Toutes les actus&ensp;→</Button>
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* ───────── 8. Footer ───────── */}
-      <footer className="bg-vert-prof px-5 py-10 text-creme-clair">
-        <div className="flex size-12 items-center justify-center rounded-full border border-creme-clair/25 text-[9px] font-mono uppercase leading-tight tracking-widest text-creme-clair/70">
-          NFPTUF
-        </div>
+      <footer className="bg-vert-prof px-5 lg:px-10 py-10 text-creme-clair">
+        <Image
+          src="/logo.png"
+          alt={SITE.nomCommercial}
+          width={48}
+          height={48}
+          className="size-12 rounded-full"
+        />
         <p className="mt-4 font-serif text-sm italic leading-relaxed text-creme-clair/70">
           &laquo;&ensp;Le bon fromage, c&rsquo;est celui qu&rsquo;on choisit bien.&ensp;&raquo;
         </p>
-        <nav className="mt-6 flex gap-4 text-xs font-medium uppercase tracking-wider text-creme-clair/60">
-          <a href="#" className="hover:text-creme-clair transition-colors">Instagram</a>
+        <nav className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-xs font-medium uppercase tracking-wider text-creme-clair/60">
+          <a href={SITE.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-creme-clair transition-colors">Instagram</a>
           <span className="text-creme-clair/20">·</span>
-          <a href="#" className="hover:text-creme-clair transition-colors">Facebook</a>
+          <a href={SITE.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-creme-clair transition-colors">Facebook</a>
           <span className="text-creme-clair/20">·</span>
-          <a href="#" className="hover:text-creme-clair transition-colors">Contact</a>
+          <a href="/contact" className="hover:text-creme-clair transition-colors">Contact</a>
         </nav>
-        <p className="mt-6 text-xs text-creme-clair/40">Massy · Île-de-France</p>
+        <nav className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-[10px] font-medium uppercase tracking-wider text-creme-clair/40">
+          <a href="/mentions-legales" className="hover:text-creme-clair/60 transition-colors">Mentions légales</a>
+          <span className="text-creme-clair/15">·</span>
+          <a href="/cgv" className="hover:text-creme-clair/60 transition-colors">CGV</a>
+          <span className="text-creme-clair/15">·</span>
+          <a href="/confidentialite" className="hover:text-creme-clair/60 transition-colors">Confidentialité</a>
+        </nav>
+        <p className="mt-6 text-xs text-creme-clair/40">Plouégat-Guérand · Bretagne</p>
       </footer>
 
       <div className="h-16" />

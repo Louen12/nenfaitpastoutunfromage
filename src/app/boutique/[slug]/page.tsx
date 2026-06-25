@@ -1,10 +1,43 @@
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { centsToEuros } from "@/lib/utils";
+import { SITE } from "@/lib/config/site";
 import Topbar from "@/components/Topbar";
 import Chip from "@/components/Chip";
 import AddToCartButton from "./AddToCartButton";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+  const { data: produit } = await supabase
+    .from("produits")
+    .select("nom, description, image_url")
+    .eq("slug", slug)
+    .single();
+
+  if (!produit) return { title: "Produit introuvable" };
+
+  return {
+    title: produit.nom,
+    description:
+      produit.description?.slice(0, 155) ||
+      `${produit.nom} — fromage artisanal disponible en click & collect chez ${SITE.nomCommercial}.`,
+    openGraph: {
+      title: `${produit.nom} — ${SITE.nomCommercial}`,
+      description:
+        produit.description?.slice(0, 155) ||
+        `Découvrez ${produit.nom}, disponible en click & collect.`,
+      ...(produit.image_url ? { images: [produit.image_url] } : {}),
+    },
+  };
+}
 
 export default async function ProduitPage({
   params,
@@ -34,8 +67,29 @@ export default async function ProduitPage({
     { label: "Distance", value: produit.distance_km ? `${produit.distance_km} km` : null },
   ].filter((d) => d.value);
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: produit.nom,
+    description: produit.description || `${produit.nom} — fromage artisanal`,
+    ...(produit.image_url ? { image: produit.image_url } : {}),
+    offers: {
+      "@type": "Offer",
+      price: (produit.prix_cents / 100).toFixed(2),
+      priceCurrency: "EUR",
+      availability: rupture
+        ? "https://schema.org/OutOfStock"
+        : "https://schema.org/InStock",
+      seller: { "@type": "Organization", name: SITE.nomCommercial },
+    },
+  };
+
   return (
     <div className="min-h-screen bg-creme-clair">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <Topbar title={produit.nom} back />
 
       {/* Image */}
@@ -47,7 +101,7 @@ export default async function ProduitPage({
         </div>
       )}
 
-      <div className="px-4 py-6 space-y-6">
+      <div className="px-4 lg:px-10 py-6 space-y-6">
         {/* Header */}
         <div>
           <div className="flex items-center gap-2 flex-wrap">

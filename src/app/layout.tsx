@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Fraunces, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import LayoutShell from "@/components/LayoutShell";
+import { SITE } from "@/lib/config/site";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -20,9 +21,28 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "N'en fais pas tout un fromage — Fromagerie itinérante",
-  description:
-    "Fromagerie artisanale itinérante en Île-de-France. Découvrez nos fromages affinés, consultez les marchés de la semaine et commandez en click & collect.",
+  title: {
+    default: `${SITE.nomCommercial} — Fromagerie itinérante`,
+    template: `%s — ${SITE.nomCommercial}`,
+  },
+  description: SITE.description,
+  metadataBase: new URL(SITE.url.startsWith("http") ? SITE.url : "https://nenfaitpastoutunfromage.fr"),
+  openGraph: {
+    type: "website",
+    locale: "fr_FR",
+    siteName: SITE.nomCommercial,
+    title: `${SITE.nomCommercial} — Fromagerie itinérante en Bretagne`,
+    description: SITE.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE.nomCommercial} — Fromagerie itinérante`,
+    description: SITE.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
