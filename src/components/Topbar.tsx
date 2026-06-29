@@ -34,11 +34,11 @@ export default function Topbar({ title, back = false, dark = false, action }: To
       ) : (
         <Link href="/" className="-ml-1" aria-label="Accueil">
           <Image
-            src="/logo.png"
+            src="/logo_NFTUF.jpg"
             alt="N'en fais pas tout un fromage"
-            width={32}
-            height={32}
-            className="size-8 rounded-full"
+            width={80}
+            height={80}
+            className="size-8 lg:size-10 rounded-full"
           />
         </Link>
       )}

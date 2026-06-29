@@ -83,14 +83,14 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* ───────── 1. Hero ───────── */}
-      <section className="relative bg-vert-prof text-creme-clair" style={{ minHeight: 430 }}>
+      <section className="relative bg-vert-prof text-creme-clair" style={{ minHeight: 340 }}>
         <div className="flex items-start justify-between px-5 lg:px-10 pt-5">
           <Image
-            src="/logo.png"
+            src="/logo_NFTUF.jpg"
             alt={SITE.nomCommercial}
-            width={56}
-            height={56}
-            className="size-14 rounded-full"
+            width={160}
+            height={160}
+            className="size-14 lg:size-24 rounded-full object-cover"
           />
           <div className="flex items-center gap-4 pt-1">
             <Link href="/panier" aria-label="Panier">
@@ -101,7 +101,7 @@ export default async function Home() {
             </Link>
           </div>
         </div>
-        <div className="flex flex-1 flex-col items-center justify-center px-6 pb-10 pt-16 text-center">
+        <div className="flex flex-1 flex-col items-center justify-center px-6 pb-8 pt-10 text-center">
           <h1 className="font-serif text-3xl font-bold uppercase leading-tight tracking-wide">
             N&rsquo;en fais pas<br />tout un fromage
           </h1>
@@ -135,13 +135,13 @@ export default async function Home() {
           Un fromager itinérant,{" "}
           <em className="not-italic text-vert italic">une sélection d&rsquo;artisans</em>
         </h2>
-        <div className="mt-6 overflow-hidden rounded-xl">
+        <div className="mt-6 lg:mx-40 overflow-hidden rounded-xl">
           <Image
             src="/images/camion-fromage.png"
             alt="Intérieur du camion — N'en fais pas tout un fromage"
             width={800}
             height={450}
-            className="w-full h-56 object-cover"
+            className="w-full h-56 lg:h-126 object-cover"
           />
         </div>
         <p className="mt-6 text-sm leading-relaxed text-texte">
@@ -167,13 +167,13 @@ export default async function Home() {
           Un fourgon-fromagerie,{" "}
           <em className="not-italic text-vert-sauge italic">aménagé sur-mesure</em>
         </h2>
-        <div className="mt-6 overflow-hidden rounded-xl">
+        <div className="mt-6 lg:mx-40 overflow-hidden rounded-xl">
           <Image
             src="/images/rayon-fromage.png"
             alt="Comptoir réfrigéré du camion avec les fromages"
             width={800}
             height={400}
-            className="w-full h-52 object-cover"
+            className="w-full h-52 lg:h-126 object-cover"
           />
         </div>
         <ul className="mt-8 space-y-4">
@@ -320,32 +320,53 @@ export default async function Home() {
       )}
 
       {/* ───────── 8. Footer ───────── */}
-      <footer className="bg-vert-prof px-5 lg:px-10 py-10 text-creme-clair">
-        <Image
-          src="/logo.png"
-          alt={SITE.nomCommercial}
-          width={48}
-          height={48}
-          className="size-12 rounded-full"
-        />
-        <p className="mt-4 font-serif text-sm italic leading-relaxed text-creme-clair/70">
-          &laquo;&ensp;Le bon fromage, c&rsquo;est celui qu&rsquo;on choisit bien.&ensp;&raquo;
-        </p>
-        <nav className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-xs font-medium uppercase tracking-wider text-creme-clair/60">
-          <a href={SITE.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-creme-clair transition-colors">Instagram</a>
-          <span className="text-creme-clair/20">·</span>
-          <a href={SITE.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-creme-clair transition-colors">Facebook</a>
-          <span className="text-creme-clair/20">·</span>
-          <a href="/contact" className="hover:text-creme-clair transition-colors">Contact</a>
-        </nav>
-        <nav className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-[10px] font-medium uppercase tracking-wider text-creme-clair/40">
-          <a href="/mentions-legales" className="hover:text-creme-clair/60 transition-colors">Mentions légales</a>
-          <span className="text-creme-clair/15">·</span>
-          <a href="/cgv" className="hover:text-creme-clair/60 transition-colors">CGV</a>
-          <span className="text-creme-clair/15">·</span>
-          <a href="/confidentialite" className="hover:text-creme-clair/60 transition-colors">Confidentialité</a>
-        </nav>
-        <p className="mt-6 text-xs text-creme-clair/40">Plouégat-Guérand · Bretagne</p>
+      <footer className="bg-vert-prof px-5 lg:px-16 py-10 lg:py-14 text-creme-clair">
+        {/* Desktop: 3 colonnes — Mobile: flux vertical classique */}
+        <div className="lg:grid lg:grid-cols-3 lg:gap-12 lg:items-start">
+          {/* Col 1 — Logo + citation */}
+          <div>
+            <Image
+              src="/logo_NFTUF.jpg"
+              alt={SITE.nomCommercial}
+              width={160}
+              height={160}
+              className="size-12 lg:size-20 rounded-full object-cover"
+            />
+            <p className="mt-4 font-serif text-sm italic leading-relaxed text-creme-clair/70">
+              &laquo;&ensp;Le bon fromage, c&rsquo;est celui qu&rsquo;on choisit bien.&ensp;&raquo;
+            </p>
+          </div>
+
+          {/* Col 2 — Navigation */}
+          <div className="mt-6 lg:mt-0">
+            <p className="hidden lg:block text-[11px] font-mono uppercase tracking-widest text-creme-clair/40 mb-4">Navigation</p>
+            <nav className="flex flex-wrap lg:flex-col gap-x-4 gap-y-2 lg:gap-y-3 text-xs font-medium uppercase tracking-wider text-creme-clair/60">
+              <a href={SITE.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-creme-clair transition-colors">Instagram</a>
+              <span className="text-creme-clair/20 lg:hidden">·</span>
+              <a href={SITE.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-creme-clair transition-colors">Facebook</a>
+              <span className="text-creme-clair/20 lg:hidden">·</span>
+              <a href="/contact" className="hover:text-creme-clair transition-colors">Contact</a>
+            </nav>
+          </div>
+
+          {/* Col 3 — Légal */}
+          <div className="mt-4 lg:mt-0">
+            <p className="hidden lg:block text-[11px] font-mono uppercase tracking-widest text-creme-clair/40 mb-4">Légal</p>
+            <nav className="flex flex-wrap lg:flex-col gap-x-4 gap-y-2 lg:gap-y-3 text-[10px] lg:text-xs font-medium uppercase tracking-wider text-creme-clair/40 lg:text-creme-clair/60">
+              <a href="/mentions-legales" className="hover:text-creme-clair/60 lg:hover:text-creme-clair transition-colors">Mentions légales</a>
+              <span className="text-creme-clair/15 lg:hidden">·</span>
+              <a href="/cgv" className="hover:text-creme-clair/60 lg:hover:text-creme-clair transition-colors">CGV</a>
+              <span className="text-creme-clair/15 lg:hidden">·</span>
+              <a href="/confidentialite" className="hover:text-creme-clair/60 lg:hover:text-creme-clair transition-colors">Confidentialité</a>
+            </nav>
+          </div>
+        </div>
+
+        {/* Barre de bas — séparateur + lieu */}
+        <div className="mt-8 lg:mt-10 lg:border-t lg:border-creme-clair/10 lg:pt-6 lg:flex lg:items-center lg:justify-between">
+          <p className="text-xs text-creme-clair/40">Plouégat-Guérand · Bretagne</p>
+          <p className="hidden lg:block text-xs text-creme-clair/40">&copy; {new Date().getFullYear()} {SITE.nomCommercial}</p>
+        </div>
       </footer>
 
       <div className="h-16" />
