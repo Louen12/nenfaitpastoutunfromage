@@ -4,6 +4,7 @@ import "./globals.css";
 import LayoutShell from "@/components/LayoutShell";
 import { SITE } from "@/lib/config/site";
 import { SITE_URL } from "@/lib/config/features";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -66,6 +67,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-creme-clair text-texte font-sans">
         <LayoutShell>{children}</LayoutShell>
+        <Analytics />
       </body>
     </html>
   );
