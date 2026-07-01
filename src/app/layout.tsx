@@ -23,17 +23,22 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: `${SITE.nomCommercial} — Fromagerie itinérante`,
+    default: `${SITE.nomCommercial} — Fromagerie artisanale itinérante en Bretagne`,
     template: `%s — ${SITE.nomCommercial}`,
   },
   description: SITE.description,
   metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: SITE_URL,
+  },
   openGraph: {
     type: "website",
     locale: "fr_FR",
     siteName: SITE.nomCommercial,
-    title: `${SITE.nomCommercial} — Fromagerie itinérante en Bretagne`,
+    title: `${SITE.nomCommercial} — Fromagerie artisanale itinérante en Bretagne`,
     description: SITE.description,
+    url: SITE_URL,
+    images: [{ url: "/logo_NFTUF.jpg", alt: SITE.nomCommercial }],
   },
   twitter: {
     card: "summary_large_image",
@@ -43,6 +48,9 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  other: {
+    "google-site-verification": process.env.GOOGLE_SITE_VERIFICATION ?? "",
   },
 };
 

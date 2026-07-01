@@ -26,5 +26,15 @@ export const SITE = {
   emailService: "Resend (Resend Inc., San Francisco, CA, USA)",
   url: "https://nenfaitpastoutunfromage.com",
   description:
-    "Fromagerie artisanale itinérante en Bretagne. Découvrez nos fromages affinés, consultez les marchés de la semaine et commandez en click & collect.",
+    "N'en fais pas tout un fromage — fromagerie artisanale itinérante en Bretagne (Finistère, Côtes-d'Armor). Fromages affinés, marchés de la semaine et click & collect.",
+  alternateNames: [
+    "N'en fais pas tout un fromage",
+    "N'en fait pas tout un fromage",
+    "Nenfaitpastoutunfromage",
+    "Ne fais pas tout un fromage",
+    "Ne fait pas tout un fromage",
+    "N en fais pas tout un fromage",
+    "N en fait pas tout un fromage",
+    "NFTUF",
+  ],
 } as const;

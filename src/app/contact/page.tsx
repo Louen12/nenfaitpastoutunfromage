@@ -4,8 +4,8 @@ import Eyebrow from "@/components/Eyebrow";
 import { SITE } from "@/lib/config/site";
 
 export const metadata: Metadata = {
-  title: `Contact — ${SITE.nomCommercial}`,
-  description: `Contactez ${SITE.nomCommercial}, fromagerie artisanale itinérante en Bretagne. Email, téléphone et réseaux sociaux.`,
+  title: "Contact",
+  description: `Contactez N'en fais pas tout un fromage (nenfaitpastoutunfromage), fromagerie artisanale itinérante en Bretagne. Email, téléphone, horaires du local à Plouégat-Guérand et réseaux sociaux.`,
 };
 
 const horaires = [

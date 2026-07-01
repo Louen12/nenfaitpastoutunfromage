@@ -4,12 +4,12 @@ import Eyebrow from "@/components/Eyebrow";
 import PhotoSlot from "@/components/PhotoSlot";
 
 export const metadata: Metadata = {
-  title: "L'artisan",
+  title: "L'artisan — Maugan LE GAC",
   description:
-    "Découvrez Maugan LE GAC, fromager itinérant en Bretagne. De Paris au Finistère : l'histoire d'un artisan passionné.",
+    "Maugan LE GAC, fondateur de N'en fais pas tout un fromage, fromager itinérant en Bretagne. De Paris au Finistère, découvrez l'histoire d'un artisan passionné par les fromages d'exception.",
   openGraph: {
-    title: "L'artisan — N'en fais pas tout un fromage",
-    description: "L'histoire de Maugan, fromager itinérant en Bretagne.",
+    title: "L'artisan Maugan LE GAC — N'en fais pas tout un fromage",
+    description: "De Paris au Finistère : l'histoire du fromager itinérant N'en fais pas tout un fromage.",
   },
 };
 

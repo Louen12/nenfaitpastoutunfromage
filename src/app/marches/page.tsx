@@ -6,12 +6,12 @@ import Eyebrow from "@/components/Eyebrow";
 import MarchesClient from "./MarchesClient";
 
 export const metadata: Metadata = {
-  title: "Marchés",
+  title: "Marchés — Où nous trouver",
   description:
-    "Retrouvez la fromagerie itinérante N'en fais pas tout un fromage sur les marchés de Bretagne. Carte interactive et horaires de la semaine.",
+    "Où trouver N'en fais pas tout un fromage ? Carte interactive et horaires des marchés de la semaine en Finistère et Côtes-d'Armor. Fromagerie itinérante en Bretagne, retrouvez nenfaitpastoutunfromage près de chez vous.",
   openGraph: {
     title: "Nos marchés — N'en fais pas tout un fromage",
-    description: "Carte et horaires des marchés de la semaine en Bretagne.",
+    description: "Carte interactive et horaires des marchés du fromager itinérant en Bretagne.",
   },
 };
 

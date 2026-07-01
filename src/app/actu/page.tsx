@@ -6,12 +6,12 @@ import Eyebrow from "@/components/Eyebrow";
 import InstagramFeed from "@/components/InstagramFeed";
 
 export const metadata: Metadata = {
-  title: "Actu",
+  title: "Actualités",
   description:
-    "Actualités et coulisses de la fromagerie itinérante N'en fais pas tout un fromage. Nouveautés, marchés et Instagram.",
+    "Actualités, nouveautés et coulisses de N'en fais pas tout un fromage, fromagerie artisanale itinérante en Bretagne. Suivez nenfaitpastoutunfromage sur Instagram et découvrez nos dernières sélections.",
   openGraph: {
-    title: "Actu — N'en fais pas tout un fromage",
-    description: "Nouveautés et coulisses du fromager ambulant.",
+    title: "Actualités — N'en fais pas tout un fromage",
+    description: "Nouveautés, coulisses et Instagram du fromager itinérant en Bretagne.",
   },
 };
 

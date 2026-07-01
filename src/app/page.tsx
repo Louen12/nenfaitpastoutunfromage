@@ -13,18 +13,27 @@ import HomeAddButton from "@/components/HomeAddButton";
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "@id": SITE.url,
+  "@id": `${SITE.url}/#business`,
   name: SITE.nomCommercial,
+  alternateName: SITE.alternateNames,
   description: SITE.description,
   url: SITE.url,
   telephone: SITE.telephone,
   email: SITE.email,
+  image: `${SITE.url}/logo_NFTUF.jpg`,
+  logo: `${SITE.url}/logo_NFTUF.jpg`,
   address: {
     "@type": "PostalAddress",
-    streetAddress: SITE.adresse,
+    streetAddress: "Le Veuzit",
     addressLocality: SITE.ville,
     postalCode: SITE.codePostal,
+    addressRegion: "Bretagne",
     addressCountry: "FR",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 48.633,
+    longitude: -3.583,
   },
   areaServed: {
     "@type": "GeoCircle",
@@ -33,6 +42,9 @@ const jsonLd = {
   },
   sameAs: [SITE.instagram, SITE.facebook],
   priceRange: "€€",
+  currenciesAccepted: "EUR",
+  paymentAccepted: "Carte bancaire",
+  hasMap: `${SITE.url}/marches`,
 };
 
 const specs = [
