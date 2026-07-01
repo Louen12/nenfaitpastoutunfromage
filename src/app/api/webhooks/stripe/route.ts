@@ -1,14 +1,18 @@
 import { NextResponse, type NextRequest } from "next/server";
 import Stripe from "stripe";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { createAdminClient } from "@/utils/supabase/admin";
 import { sendPickupEmail } from "@/lib/email/sendPickupEmail";
 import { SHOP_ENABLED } from "@/lib/config/features";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   if (!SHOP_ENABLED) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
+
+  const stripe = getStripe();
   const body = await request.text();
   const sig = request.headers.get("stripe-signature");
 

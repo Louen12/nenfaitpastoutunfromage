@@ -1,7 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { createAdminClient } from "@/utils/supabase/admin";
 import { SHOP_ENABLED } from "@/lib/config/features";
+
+export const dynamic = "force-dynamic";
 
 interface CartItem {
   produit_id: string;
@@ -83,6 +85,7 @@ export async function POST(request: NextRequest) {
     });
 
     const origin = request.headers.get("origin") ?? "http://localhost:3000";
+    const stripe = getStripe();
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
