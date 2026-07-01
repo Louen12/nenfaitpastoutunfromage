@@ -5,8 +5,9 @@ export const SITE = {
   capitalSocial: "1 000 €",
   siren: "939 719 688",
   siret: "939 719 688 00011",
-  tva: "FR61939719688", // ⚠️ confirmer le RÉGIME : assujetti ou franchise en base de TVA ?
-  rcs: "RCS Brest 939 719 688", // ⚠️ ville du greffe à confirmer sur le Kbis / extrait RNE
+  tva: "FR61939719688",
+  regimeTva: "TVA au taux réduit de 5,5 % (produits alimentaires)",
+  rcs: "RCS Brest 939 719 688",
   naf: "4781Z — Commerce de détail alimentaire sur éventaires et marchés",
   activite: "Crèmerie, fromagerie",
   gerant: "Maugan LE GAC",
