@@ -1,10 +1,13 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { SHOP_ENABLED } from "@/lib/config/features";
 
 export default async function ConfirmationPage({
   searchParams,
 }: {
   searchParams: Promise<{ session_id?: string }>;
 }) {
+  if (!SHOP_ENABLED) notFound();
   const { session_id } = await searchParams;
 
   return (

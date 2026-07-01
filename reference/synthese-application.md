@@ -667,4 +667,4 @@ Webhook Stripe déclenché après paiement réussi (`checkout.session.completed`
 | Téléphone            | 06 13 87 07 17                                      |
 | Zone                 | Finistère · Côtes-d'Armor                           |
 | Instagram            | @nenfaispastoutunfromage                            |
-| URL                  | nenfaitpastoutunfromage.fr                          |
+| URL                  | nenfaitpastoutunfromage.com                          |

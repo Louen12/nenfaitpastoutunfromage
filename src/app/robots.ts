@@ -1,11 +1,7 @@
 import type { MetadataRoute } from "next";
-import { SITE } from "@/lib/config/site";
+import { SITE_URL } from "@/lib/config/features";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = SITE.url.startsWith("http")
-    ? SITE.url
-    : "https://nenfaitpastoutunfromage.fr";
-
   return {
     rules: [
       {
@@ -14,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/admin/*", "/api", "/api/*"],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

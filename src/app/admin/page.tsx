@@ -1,39 +1,49 @@
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import AdminShell from "@/components/admin/AdminShell";
+import { SHOP_ENABLED } from "@/lib/config/features";
 
 export default async function AdminDashboard() {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
-  const { count: commandesEnAttente } = await supabase
-    .from("commandes")
-    .select("*", { count: "exact", head: true })
-    .eq("statut", "en_attente");
-
-  const { count: totalProduits } = await supabase
-    .from("produits")
-    .select("*", { count: "exact", head: true });
-
-  const { count: marchesActifs } = await supabase
-    .from("marches")
-    .select("*", { count: "exact", head: true })
-    .eq("actif", true);
+  const [{ count: commandesEnAttente }, { count: totalProduits }, { count: marchesActifs }] =
+    await Promise.all([
+      SHOP_ENABLED
+        ? supabase
+            .from("commandes")
+            .select("*", { count: "exact", head: true })
+            .eq("statut", "en_attente")
+        : Promise.resolve({ count: null }),
+      SHOP_ENABLED
+        ? supabase
+            .from("produits")
+            .select("*", { count: "exact", head: true })
+        : Promise.resolve({ count: null }),
+      supabase
+        .from("marches")
+        .select("*", { count: "exact", head: true })
+        .eq("actif", true),
+    ]);
 
   return (
     <AdminShell titre="Tableau de bord">
       <div className="grid grid-cols-2 gap-3">
-        <DashCard
-          label="Commandes en attente"
-          value={commandesEnAttente ?? 0}
-          href="/admin/commandes"
-          accent
-        />
-        <DashCard
-          label="Produits"
-          value={totalProduits ?? 0}
-          href="/admin/produits"
-        />
+        {SHOP_ENABLED && (
+          <DashCard
+            label="Commandes en attente"
+            value={commandesEnAttente ?? 0}
+            href="/admin/commandes"
+            accent
+          />
+        )}
+        {SHOP_ENABLED && (
+          <DashCard
+            label="Produits"
+            value={totalProduits ?? 0}
+            href="/admin/produits"
+          />
+        )}
         <DashCard
           label="Marchés actifs"
           value={marchesActifs ?? 0}
@@ -47,9 +57,9 @@ export default async function AdminDashboard() {
       </div>
 
       <nav className="mt-6 space-y-2">
-        <QuickLink href="/admin/produits" label="Gérer les produits" />
+        {SHOP_ENABLED && <QuickLink href="/admin/produits" label="Gérer les produits" />}
         <QuickLink href="/admin/marches" label="Gérer les marchés" />
-        <QuickLink href="/admin/commandes" label="Voir les commandes" />
+        {SHOP_ENABLED && <QuickLink href="/admin/commandes" label="Voir les commandes" />}
         <QuickLink href="/admin/actualites" label="Gérer les actualités" />
       </nav>
     </AdminShell>

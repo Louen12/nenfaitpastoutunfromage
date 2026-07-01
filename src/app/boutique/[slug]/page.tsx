@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { centsToEuros } from "@/lib/utils";
 import { SITE } from "@/lib/config/site";
+import { SHOP_ENABLED } from "@/lib/config/features";
 import Topbar from "@/components/Topbar";
 import Chip from "@/components/Chip";
 import AddToCartButton from "./AddToCartButton";
@@ -44,6 +45,7 @@ export default async function ProduitPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  if (!SHOP_ENABLED) notFound();
   const { slug } = await params;
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);

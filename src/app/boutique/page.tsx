@@ -1,6 +1,8 @@
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
+import { SHOP_ENABLED } from "@/lib/config/features";
 import Topbar from "@/components/Topbar";
 import Eyebrow from "@/components/Eyebrow";
 import BoutiqueGrid from "./BoutiqueGrid";
@@ -16,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BoutiquePage() {
+  if (!SHOP_ENABLED) notFound();
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 

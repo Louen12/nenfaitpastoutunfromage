@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { createAdminClient } from "@/utils/supabase/admin";
+import { SHOP_ENABLED } from "@/lib/config/features";
 
 interface CartItem {
   produit_id: string;
@@ -23,6 +24,9 @@ interface CheckoutBody {
 }
 
 export async function POST(request: NextRequest) {
+  if (!SHOP_ENABLED) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
   try {
     const body: CheckoutBody = await request.json();
 

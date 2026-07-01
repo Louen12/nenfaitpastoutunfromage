@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { centsToEuros, jourLabel } from "@/lib/utils";
 import { SITE } from "@/lib/config/site";
+import { SHOP_ENABLED } from "@/lib/config/features";
 import Button from "@/components/Button";
 import Eyebrow from "@/components/Eyebrow";
 import Chip from "@/components/Chip";
@@ -61,13 +62,15 @@ export default async function Home() {
       .eq("actif", true)
       .order("jour_semaine")
       .order("position"),
-    supabase
-      .from("produits")
-      .select("*")
-      .eq("disponible", true)
-      .order("en_avant", { ascending: false })
-      .order("position")
-      .limit(4),
+    SHOP_ENABLED
+      ? supabase
+          .from("produits")
+          .select("*")
+          .eq("disponible", true)
+          .order("en_avant", { ascending: false })
+          .order("position")
+          .limit(4)
+      : Promise.resolve({ data: null }),
     supabase
       .from("actualites")
       .select("*")
@@ -92,14 +95,16 @@ export default async function Home() {
             height={160}
             className="size-14 lg:size-24 rounded-full object-cover"
           />
-          <div className="flex items-center gap-4 pt-1">
-            <Link href="/panier" aria-label="Panier">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="size-6">
-                <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-              </svg>
-            </Link>
-          </div>
+          {SHOP_ENABLED && (
+            <div className="flex items-center gap-4 pt-1">
+              <Link href="/panier" aria-label="Panier">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="size-6">
+                  <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                </svg>
+              </Link>
+            </div>
+          )}
         </div>
         <div className="flex flex-1 flex-col items-center justify-center px-6 pb-8 pt-10 text-center">
           <h1 className="font-serif text-3xl font-bold uppercase leading-tight tracking-wide">
@@ -122,9 +127,11 @@ export default async function Home() {
           <Link href="/marches">
             <Button variant="primary">Voir les marchés&ensp;→</Button>
           </Link>
-          <Link href="/boutique">
-            <Button variant="ghost">La boutique</Button>
-          </Link>
+          {SHOP_ENABLED && (
+            <Link href="/boutique">
+              <Button variant="ghost">La boutique</Button>
+            </Link>
+          )}
         </div>
       </section>
 
@@ -219,58 +226,60 @@ export default async function Home() {
       </section>
 
       {/* ───────── 6. Boutique preview ───────── */}
-      <section className="bg-off px-5 lg:px-10 py-12">
-        <Eyebrow>La boutique</Eyebrow>
-        <h2 className="mt-3 font-serif text-2xl font-semibold leading-snug text-encre">
-          Nos fromages
-        </h2>
-        <div className="mt-6 grid grid-cols-2 gap-3">
-          {produits && produits.length > 0 ? (
-            produits.map((p) => (
-              <article
-                key={p.id}
-                className="relative flex flex-col overflow-hidden rounded-xl border border-ligne bg-creme-clair"
-              >
-                <Link href={`/boutique/${p.slug}`}>
-                  {p.image_url ? (
-                    <img src={p.image_url} alt={p.nom} className="h-32 w-full object-cover" />
-                  ) : (
-                    <div className="h-32 w-full bg-kraft/30 flex items-center justify-center">
-                      <span className="text-2xl">🧀</span>
-                    </div>
-                  )}
-                </Link>
-                <div className="flex flex-1 flex-col p-3">
-                  <h3 className="text-sm font-semibold leading-snug text-encre">{p.nom}</h3>
-                  <p className="mt-auto pt-2 text-xs text-mute">
-                    <span className="font-semibold text-vert">{centsToEuros(p.prix_cents)}&nbsp;€</span>
-                    <span className="ml-1">/ {p.unite_label}</span>
-                  </p>
-                </div>
-                <HomeAddButton
-                  produit={{
-                    produit_id: p.id,
-                    nom: p.nom,
-                    slug: p.slug,
-                    prix_cents: p.prix_cents,
-                    unite_label: p.unite_label,
-                    image_url: p.image_url,
-                  }}
-                />
-              </article>
-            ))
-          ) : (
-            <p className="col-span-2 text-sm text-mute text-center py-4">
-              Produits bientôt disponibles.
-            </p>
-          )}
-        </div>
-        <div className="mt-6 text-center">
-          <Link href="/boutique">
-            <Button variant="ghost">Voir toute la boutique&ensp;→</Button>
-          </Link>
-        </div>
-      </section>
+      {SHOP_ENABLED && (
+        <section className="bg-off px-5 lg:px-10 py-12">
+          <Eyebrow>La boutique</Eyebrow>
+          <h2 className="mt-3 font-serif text-2xl font-semibold leading-snug text-encre">
+            Nos fromages
+          </h2>
+          <div className="mt-6 grid grid-cols-2 gap-3">
+            {produits && produits.length > 0 ? (
+              produits.map((p) => (
+                <article
+                  key={p.id}
+                  className="relative flex flex-col overflow-hidden rounded-xl border border-ligne bg-creme-clair"
+                >
+                  <Link href={`/boutique/${p.slug}`}>
+                    {p.image_url ? (
+                      <img src={p.image_url} alt={p.nom} className="h-32 w-full object-cover" />
+                    ) : (
+                      <div className="h-32 w-full bg-kraft/30 flex items-center justify-center">
+                        <span className="text-2xl">🧀</span>
+                      </div>
+                    )}
+                  </Link>
+                  <div className="flex flex-1 flex-col p-3">
+                    <h3 className="text-sm font-semibold leading-snug text-encre">{p.nom}</h3>
+                    <p className="mt-auto pt-2 text-xs text-mute">
+                      <span className="font-semibold text-vert">{centsToEuros(p.prix_cents)}&nbsp;€</span>
+                      <span className="ml-1">/ {p.unite_label}</span>
+                    </p>
+                  </div>
+                  <HomeAddButton
+                    produit={{
+                      produit_id: p.id,
+                      nom: p.nom,
+                      slug: p.slug,
+                      prix_cents: p.prix_cents,
+                      unite_label: p.unite_label,
+                      image_url: p.image_url,
+                    }}
+                  />
+                </article>
+              ))
+            ) : (
+              <p className="col-span-2 text-sm text-mute text-center py-4">
+                Produits bientôt disponibles.
+              </p>
+            )}
+          </div>
+          <div className="mt-6 text-center">
+            <Link href="/boutique">
+              <Button variant="ghost">Voir toute la boutique&ensp;→</Button>
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* ───────── 7. Nouveautés ───────── */}
       {actualites && actualites.length > 0 && (
@@ -354,8 +363,12 @@ export default async function Home() {
             <p className="hidden lg:block text-[11px] font-mono uppercase tracking-widest text-creme-clair/40 mb-4">Légal</p>
             <nav className="flex flex-wrap lg:flex-col gap-x-4 gap-y-2 lg:gap-y-3 text-[10px] lg:text-xs font-medium uppercase tracking-wider text-creme-clair/40 lg:text-creme-clair/60">
               <a href="/mentions-legales" className="hover:text-creme-clair/60 lg:hover:text-creme-clair transition-colors">Mentions légales</a>
-              <span className="text-creme-clair/15 lg:hidden">·</span>
-              <a href="/cgv" className="hover:text-creme-clair/60 lg:hover:text-creme-clair transition-colors">CGV</a>
+              {SHOP_ENABLED && (
+                <>
+                  <span className="text-creme-clair/15 lg:hidden">·</span>
+                  <a href="/cgv" className="hover:text-creme-clair/60 lg:hover:text-creme-clair transition-colors">CGV</a>
+                </>
+              )}
               <span className="text-creme-clair/15 lg:hidden">·</span>
               <a href="/confidentialite" className="hover:text-creme-clair/60 lg:hover:text-creme-clair transition-colors">Confidentialité</a>
             </nav>

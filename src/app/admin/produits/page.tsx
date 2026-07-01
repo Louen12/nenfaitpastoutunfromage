@@ -1,12 +1,15 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { centsToEuros } from "@/lib/utils";
+import { SHOP_ENABLED } from "@/lib/config/features";
 import AdminShell from "@/components/admin/AdminShell";
 import ProduitToggle from "./ProduitToggle";
 import ClickStop from "@/components/admin/ClickStop";
 
 export default async function ProduitsPage() {
+  if (!SHOP_ENABLED) notFound();
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 

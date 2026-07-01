@@ -24,7 +24,7 @@ export const SITE = {
   baseDonnees: "Supabase (Supabase Inc., San Francisco, CA, USA)",
   paiement: "Stripe (Stripe Payments Europe Ltd., Dublin, Irlande)",
   emailService: "Resend (Resend Inc., San Francisco, CA, USA)",
-  url: "https://nenfaitpastoutunfromage.fr",
+  url: "https://nenfaitpastoutunfromage.com",
   description:
     "Fromagerie artisanale itinérante en Bretagne. Découvrez nos fromages affinés, consultez les marchés de la semaine et commandez en click & collect.",
 } as const;

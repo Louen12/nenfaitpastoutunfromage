@@ -1,13 +1,18 @@
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
+import { SHOP_ENABLED } from "@/lib/config/features";
 
-const navItems = [
-  { label: "Accueil", href: "/admin" },
-  { label: "Produits", href: "/admin/produits" },
-  { label: "Marchés", href: "/admin/marches" },
-  { label: "Commandes", href: "/admin/commandes" },
-  { label: "Actus", href: "/admin/actualites" },
+const allNavItems = [
+  { label: "Accueil", href: "/admin", shop: false },
+  { label: "Produits", href: "/admin/produits", shop: true },
+  { label: "Marchés", href: "/admin/marches", shop: false },
+  { label: "Commandes", href: "/admin/commandes", shop: true },
+  { label: "Actus", href: "/admin/actualites", shop: false },
 ];
+
+const navItems = SHOP_ENABLED
+  ? allNavItems
+  : allNavItems.filter((i) => !i.shop);
 
 export default function AdminShell({
   titre,

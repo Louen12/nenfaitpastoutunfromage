@@ -3,6 +3,7 @@ import { Inter, Fraunces, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import LayoutShell from "@/components/LayoutShell";
 import { SITE } from "@/lib/config/site";
+import { SITE_URL } from "@/lib/config/features";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
     template: `%s — ${SITE.nomCommercial}`,
   },
   description: SITE.description,
-  metadataBase: new URL(SITE.url.startsWith("http") ? SITE.url : "https://nenfaitpastoutunfromage.fr"),
+  metadataBase: new URL(SITE_URL),
   openGraph: {
     type: "website",
     locale: "fr_FR",

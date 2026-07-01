@@ -418,7 +418,7 @@ Vercel (CI/CD automatique)
     │
     ├─ Build Next.js (npm run build)
     ├─ Déploiement edge + serverless functions
-    └─ URL de production : nenfaitpastoutunfromage.fr
+    └─ URL de production : nenfaitpastoutunfromage.com
 ```
 
 ### 10.2 Commandes

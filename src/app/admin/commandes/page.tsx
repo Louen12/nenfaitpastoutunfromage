@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { centsToEuros } from "@/lib/utils";
+import { SHOP_ENABLED } from "@/lib/config/features";
 import AdminShell from "@/components/admin/AdminShell";
 import CommandeFilters from "./CommandeFilters";
 
@@ -17,6 +19,7 @@ export default async function CommandesPage({
 }: {
   searchParams: Promise<{ statut?: string }>;
 }) {
+  if (!SHOP_ENABLED) notFound();
   const { statut } = await searchParams;
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);

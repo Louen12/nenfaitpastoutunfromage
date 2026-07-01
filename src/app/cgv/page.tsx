@@ -1,6 +1,8 @@
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import LegalPage from "@/components/LegalPage";
 import { SITE } from "@/lib/config/site";
+import { SHOP_ENABLED } from "@/lib/config/features";
 
 export const metadata: Metadata = {
   title: `Conditions générales de vente — ${SITE.nomCommercial}`,
@@ -8,6 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function CGVPage() {
+  if (!SHOP_ENABLED) notFound();
   return (
     <LegalPage title="CGV">
       <h1>Conditions générales de vente</h1>

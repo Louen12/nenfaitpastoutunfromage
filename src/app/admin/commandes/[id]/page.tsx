@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { centsToEuros } from "@/lib/utils";
+import { SHOP_ENABLED } from "@/lib/config/features";
 import AdminShell from "@/components/admin/AdminShell";
 import StatutActions from "./StatutActions";
 
@@ -24,6 +25,7 @@ export default async function CommandeDetail({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  if (!SHOP_ENABLED) notFound();
   const { id } = await params;
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);

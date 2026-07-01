@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/lib/cart";
+import { SHOP_ENABLED } from "@/lib/config/features";
 
-const tabs = [
+const allTabs = [
   {
     label: "Accueil",
     href: "/",
+    shop: false,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="size-6">
         <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V10.5z" />
@@ -18,6 +20,7 @@ const tabs = [
   {
     label: "Marchés",
     href: "/marches",
+    shop: false,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="size-6">
         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
@@ -28,6 +31,7 @@ const tabs = [
   {
     label: "Boutique",
     href: "/boutique",
+    shop: true,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="size-6">
         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
@@ -39,6 +43,7 @@ const tabs = [
   {
     label: "Actu",
     href: "/actu",
+    shop: false,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="size-6">
         <rect x="3" y="3" width="18" height="18" rx="2" />
@@ -51,6 +56,7 @@ const tabs = [
   {
     label: "Panier",
     href: "/panier",
+    shop: true,
     badge: true,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="size-6">
@@ -61,6 +67,8 @@ const tabs = [
     ),
   },
 ];
+
+const tabs = SHOP_ENABLED ? allTabs : allTabs.filter((t) => !t.shop);
 
 export default function TabBar() {
   const pathname = usePathname();

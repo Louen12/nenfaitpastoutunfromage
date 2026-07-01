@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { type Tables } from "@/utils/supabase/database.types";
 import { jourLabel } from "@/lib/utils";
+import { SHOP_ENABLED } from "@/lib/config/features";
 
 const MarchesMap = dynamic(() => import("@/components/MarchesMap"), {
   ssr: false,
@@ -64,7 +65,7 @@ export default function MarchesClient({ marches }: { marches: Marche[] }) {
         <div className="pb-6">
           <MarchesMap
             marches={marches}
-            onSelectForRetrait={(id) => router.push(`/panier?retrait=marche&marche_id=${id}`)}
+            onSelectForRetrait={SHOP_ENABLED ? (id) => router.push(`/panier?retrait=marche&marche_id=${id}`) : undefined}
           />
           <div className="mx-4 mt-3 flex items-center gap-4 text-xs text-mute">
             <span className="flex items-center gap-1.5">
